@@ -4,7 +4,8 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
+import java.util.ArrayList;
+import java.util.List;
 @Entity
 @Table(name = "contacts")
 public class Contact implements Serializable {
@@ -20,6 +21,10 @@ public class Contact implements Serializable {
     private String email;
     private String organization;
     private String github;
+
+    @OneToMany(mappedBy = "contact", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private List<GithubRepository> githubRepositories = new ArrayList<>();
 
     public Contact() {
     }
@@ -73,6 +78,16 @@ public class Contact implements Serializable {
         this.github = github;
         return this;
     }
+
+    public List<GithubRepository> getGithubRepositories() {
+        return githubRepositories;
+    }
+
+    public Contact setGithubRepositories(List<GithubRepository> githubRepositories) {
+        this.githubRepositories = githubRepositories;
+        return this;
+    }
+
     //endregion
     @Override
     public String toString() {

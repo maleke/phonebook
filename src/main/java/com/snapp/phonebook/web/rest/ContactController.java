@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+
 @RestController
 @RequestMapping(value = "${info.rest.version}")
 public class ContactController {
@@ -26,8 +27,7 @@ public class ContactController {
     }
 
     @RequestMapping(value = "/contacts", method = RequestMethod.POST)
-    public ResponseEntity<ContactDto> createContact(
-            @Valid @RequestBody ContactDto contactDto)
+    public ResponseEntity<ContactDto> createContact(@Valid @RequestBody ContactDto contactDto)
             throws JsonProcessingException, ServiceException {
 
         logger.debug("REST request to save contact : {}", contactDto);

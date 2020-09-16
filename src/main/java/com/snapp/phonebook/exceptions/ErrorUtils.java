@@ -1,5 +1,8 @@
 package com.snapp.phonebook.exceptions;
 
+import com.snapp.phonebook.exceptions.ServiceException;
+import com.snapp.phonebook.exceptions.error.ErrorCode;
+
 import java.util.logging.Logger;
 
 public class ErrorUtils {
@@ -28,7 +31,7 @@ public class ErrorUtils {
         }
     }
 
-    public boolean isSameErrorCode(ErrorCodes errorCode, Throwable throwable) {
+    public boolean isSameErrorCode(ErrorCode errorCode, Throwable throwable) {
         ServiceException serviceException = extractServiceException(throwable);
         return serviceException != null && errorCode.getCode() == serviceException.errorCode;
     }

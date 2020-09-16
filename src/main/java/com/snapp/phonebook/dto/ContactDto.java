@@ -1,14 +1,17 @@
 package com.snapp.phonebook.dto;
 
 import javax.persistence.Column;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class ContactDto implements Serializable {
+    @NotNull(message = "{null.name}")
     private String name;
     @Column(name = "phone_number")
     private String phoneNumber;
     private String email;
     private String organization;
+    @NotNull(message = "{null.github}")
     private String github;
 
     public ContactDto() {
