@@ -4,7 +4,7 @@
 <configuration>
     <!--todo LogLevel must be INFO-->
     <property name="LOG_LEVEL" value="DEBUG"/>
-    <property name="MY_HOME" value="/home"/>
+    <property name="MY_HOME" value="/home/fatemeh"/>
     <property name="LOG_PATH" value="${MY_HOME}/phonebook/logs"/>
     <property name="LOG_ARCHIVE" value="${LOG_PATH}/Archived"/>
 
@@ -16,7 +16,7 @@
 
     <appender name="FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/SgLog.log</file>
+        <file>${LOG_PATH}/PhonebookLog.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <charset>UTF-8</charset>
             <Pattern>
