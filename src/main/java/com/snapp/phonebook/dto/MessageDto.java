@@ -5,7 +5,7 @@ import com.snapp.phonebook.enums.MessageType;
 
 import java.io.Serializable;
 
-public class MessageDTO implements Serializable{
+public class MessageDto implements Serializable{
 
     //region properties
 
@@ -17,11 +17,11 @@ public class MessageDTO implements Serializable{
 
     //region constructor
 
-    public MessageDTO() {
+    public MessageDto() {
         super();
     }
 
-    public MessageDTO(MessageType type, String message) {
+    public MessageDto(MessageType type, String message) {
         super();
         this.message = message;
         this.type = type;
@@ -34,7 +34,7 @@ public class MessageDTO implements Serializable{
         return message;
     }
 
-    public MessageDTO setMessage(String message) {
+    public MessageDto setMessage(String message) {
         this.message = message;
         return this;
     }
@@ -43,7 +43,7 @@ public class MessageDTO implements Serializable{
         return type;
     }
 
-    public MessageDTO setType(MessageType type) {
+    public MessageDto setType(MessageType type) {
         this.type = type;
         return this;
     }

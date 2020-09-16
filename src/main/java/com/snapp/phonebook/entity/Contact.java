@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "contacts")
-@Getter
 public class Contact implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -21,6 +20,34 @@ public class Contact implements Serializable {
     private String email;
     private String organization;
     private String github;
+
+    public Contact() {
+    }
+    //region getterAndSetter
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getOrganization() {
+        return organization;
+    }
+
+    public String getGithub() {
+        return github;
+    }
 
     public Contact setName(String name) {
         this.name = name;
@@ -46,7 +73,7 @@ public class Contact implements Serializable {
         this.github = github;
         return this;
     }
-
+    //endregion
     @Override
     public String toString() {
         return "Contact{" +

@@ -2,7 +2,7 @@ package com.snapp.phonebook.exceptions;
 
 
 import com.snapp.phonebook.common.CommonResponseDto;
-import com.snapp.phonebook.dto.MessageDTO;
+import com.snapp.phonebook.dto.MessageDto;
 import com.snapp.phonebook.enums.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -32,19 +32,19 @@ public class ControllerValidationHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public MessageDTO processValidationError(MethodArgumentNotValidException ex) {
+    public MessageDto processValidationError(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
         FieldError error = result.getFieldError();
 
         return processFieldError(error);
     }
 
-    private MessageDTO processFieldError(FieldError error) {
-        MessageDTO message = null;
+    private MessageDto processFieldError(FieldError error) {
+        MessageDto message = null;
         if (error != null) {
             Locale currentLocale = LocaleContextHolder.getLocale();
             String msg = msgSource.getMessage(error.getDefaultMessage(), null, currentLocale);
-            message = new MessageDTO(MessageType.ERROR, msg);
+            message = new MessageDto(MessageType.ERROR, msg);
         }
         return message;
     }
