@@ -12,7 +12,7 @@ public class GithubRepository implements Serializable {
     private Long id;
 
     @Column(name = "repository_name")
-    private String repositoryName;
+    private String name;
 
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -32,12 +32,12 @@ public class GithubRepository implements Serializable {
         return this;
     }
 
-    public String getRepositoryName() {
-        return repositoryName;
+    public String getName() {
+        return name;
     }
 
-    public GithubRepository setRepositoryName(String repositoryName) {
-        this.repositoryName = repositoryName;
+    public GithubRepository setName(String repositoryName) {
+        this.name = repositoryName;
         return this;
     }
 
@@ -55,7 +55,7 @@ public class GithubRepository implements Serializable {
     public String toString() {
         return "GithubRepository{" +
                 "id=" + id +
-                ", repositoryName='" + repositoryName + '\'' +
+                ", repositoryName='" + name + '\'' +
                 ", contact=" + contact +
                 '}';
     }
