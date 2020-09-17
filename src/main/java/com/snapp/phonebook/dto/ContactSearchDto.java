@@ -1,26 +1,20 @@
 package com.snapp.phonebook.dto;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-public class ContactDto implements Serializable {
-    @NotNull(message = "{null.name}")
-    //todo:: add uniqueness
+public class ContactSearchDto implements Serializable {
     private String name;
     private String phoneNumber;
     private String email;
     private String organization;
     private String github;
 
-    public ContactDto() {
-    }
-
-    //region getterAndSetter
+    //region getter And Setter
     public String getName() {
         return name;
     }
 
-    public ContactDto setName(String name) {
+    public ContactSearchDto setName(String name) {
         this.name = name;
         return this;
     }
@@ -29,7 +23,7 @@ public class ContactDto implements Serializable {
         return phoneNumber;
     }
 
-    public ContactDto setPhoneNumber(String phoneNumber) {
+    public ContactSearchDto setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return this;
     }
@@ -38,7 +32,7 @@ public class ContactDto implements Serializable {
         return email;
     }
 
-    public ContactDto setEmail(String email) {
+    public ContactSearchDto setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -47,7 +41,7 @@ public class ContactDto implements Serializable {
         return organization;
     }
 
-    public ContactDto setOrganization(String organization) {
+    public ContactSearchDto setOrganization(String organization) {
         this.organization = organization;
         return this;
     }
@@ -56,14 +50,16 @@ public class ContactDto implements Serializable {
         return github;
     }
 
-    public ContactDto setGithub(String github) {
+    public ContactSearchDto setGithub(String github) {
         this.github = github;
         return this;
     }
+
     //endregion
+
     @Override
     public String toString() {
-        return "ContactDto{" +
+        return "ContactSearchDto{" +
                 "name='" + name + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +

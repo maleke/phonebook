@@ -15,3 +15,5 @@ The following guides illustrate how to use some features concretely:
 * [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
 * [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
 
+علت افزودن dto  برای search
+با توجه به اینکه ورودی های search create با یکدیگر یکسان هستند به نظر می رسد که باید از dto یکسانی برای آنها استفاده نمود لیکن با توجه به اینکه در هنگام ذخیره کردن وارد کردن نام اجباری است ولی در search این فیلد می تواند خالی باشد تصیم بر ان شد که از یک dto جدید استفاده شد. ارجحیت بر آن شد که از inheritance در این مورد استفاده نشود

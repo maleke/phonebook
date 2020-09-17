@@ -1,6 +1,7 @@
 package com.snapp.phonebook.mapper;
 
 import com.snapp.phonebook.dto.ContactDto;
+import com.snapp.phonebook.dto.ContactSearchDto;
 import com.snapp.phonebook.entity.Contact;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -9,4 +10,6 @@ import org.mapstruct.ReportingPolicy;
 public interface ContactMapper {
     ContactDto contactToContactDto(Contact contact);
     Contact contactDtoToContact(ContactDto contactDto);
+    Contact contactSearchDtoToContact(ContactSearchDto contactSearchDto);
+    ContactSearchDto contactToContactSearchDto(Contact contact);
 }

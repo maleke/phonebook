@@ -1,6 +1,7 @@
 package com.snapp.phonebook.service;
 
 import com.snapp.phonebook.dto.ContactDto;
+import com.snapp.phonebook.dto.ContactSearchDto;
 import com.snapp.phonebook.entity.Contact;
 import com.snapp.phonebook.entity.GithubRepository;
 import com.snapp.phonebook.exceptions.ServiceException;
@@ -10,18 +11,30 @@ import com.snapp.phonebook.mapper.ContactMapper;
 import com.snapp.phonebook.repository.ContactRepository;
 import com.snapp.phonebook.search.ContactElasticRepository;
 import com.snapp.phonebook.utility.SerializeUtility;
+import io.netty.util.internal.StringUtil;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.*;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
@@ -34,14 +47,18 @@ public class ContactService {
     private final GithubService githubService;
     private final RabbitTemplate rabbitTemplate;
     private final TopicExchange topic;
+    private final ElasticsearchOperations elasticsearchOperations;
+    private final ElasticsearchRestTemplate elasticsearchRestTemplate;
 
-    public ContactService(ContactMapper contactMapper, ContactRepository contactRepository, ContactElasticRepository contactElasticRepository, GithubService githubService, RabbitTemplate rabbitTemplate, TopicExchange topic) {
+    public ContactService(ContactMapper contactMapper, ContactRepository contactRepository, ContactElasticRepository contactElasticRepository, GithubService githubService, RabbitTemplate rabbitTemplate, TopicExchange topic, ElasticsearchOperations elasticsearchOperations, ElasticsearchRestTemplate elasticsearchRestTemplate) {
         this.contactMapper = contactMapper;
         this.contactElasticRepository = contactElasticRepository;
         this.contactRepository = contactRepository;
         this.githubService = githubService;
         this.rabbitTemplate = rabbitTemplate;
         this.topic = topic;
+        this.elasticsearchOperations = elasticsearchOperations;
+        this.elasticsearchRestTemplate = elasticsearchRestTemplate;
     }
 
     @Transactional
@@ -62,19 +79,17 @@ public class ContactService {
         try {
             List<GithubRepository> contactGithubRepository = githubService.getContactGithubRepository(contactName).get();
             setParent(contactGithubRepository, contact);
+            contact = contactRepository.save(contact);
             contactElasticRepository.save(contact);
-            contactRepository.save(contact);
         } catch (InterruptedException | ExecutionException e) {
             logger.error("An error occurred in calling githubRepository web service" + e.getMessage());
         }
-
     }
 
     private void checkIfUserExist(String name) throws ServiceException {
         Optional<Contact> contact = contactRepository.findByName(name);
         if (contact.isPresent())
-//        if (contact != null)
-            throw new ServiceException(new FieldErrorDTO().setErrorDescription("This name already exist")
+            throw new ServiceException(new FieldErrorDTO().setErrorDescription("This name is already exist")
                     .setErrorCode(String.valueOf(ErrorCode.DUPLICATE_DATA.getCode())));
     }
 
@@ -84,4 +99,35 @@ public class ContactService {
         contact.setGithubRepositories(contactGithubRepositories);
     }
 
+    public List<ContactSearchDto> findContact(ContactSearchDto contactSearchDto) {
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        mustQuery("name", contactSearchDto.getName(), boolQueryBuilder);
+        mustQuery("phone_number", contactSearchDto.getPhoneNumber(), boolQueryBuilder);
+        mustQuery("organization", contactSearchDto.getOrganization(), boolQueryBuilder);
+        mustQuery("github", contactSearchDto.getGithub(), boolQueryBuilder);
+        IndexCoordinates index = IndexCoordinates.of("contact");
+        Query searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(boolQueryBuilder)
+                .build();
+
+        SearchHits<Contact> result = elasticsearchOperations.search(searchQuery, Contact.class, index);
+        List<ContactSearchDto> contactSearchDtos = result
+                .stream()
+                .map(contactSearchHit ->
+                        contactMapper.contactToContactSearchDto(contactSearchHit.getContent())
+                ).collect(Collectors.toList());
+//        for (SearchHit<Contact> contact: result) {
+//            Contact c = contact.getContent();
+//            System.out.println(c);
+//        }
+
+
+        return contactSearchDtos;
+    }
+
+    private void mustQuery(String name, String value, BoolQueryBuilder boolQueryBuilder) {
+        if (StringUtils.hasLength(value)) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery(name, value));
+        }
+    }
 }

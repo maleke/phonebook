@@ -12,12 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Table(name = "contacts")
-@Document(indexName = "contact", createIndex = false)
+@Document(indexName = "contact")
 public class Contact implements Serializable {
     @Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id",updatable = false, nullable = false)
-    private Long id;
+    private String id;
 
     @Field(type = FieldType.Keyword)
     private String name;
@@ -41,8 +42,13 @@ public class Contact implements Serializable {
     }
     //region getterAndSetter
 
-    public Long getId() {
+    public String getId() {
         return id;
+    }
+
+    public Contact setId(String id) {
+        this.id = id;
+        return this;
     }
 
     public String getName() {
@@ -100,14 +106,17 @@ public class Contact implements Serializable {
     }
 
     //endregion
+
     @Override
     public String toString() {
         return "Contact{" +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", organization='" + organization + '\'' +
                 ", github='" + github + '\'' +
+                ", githubRepositories=" + githubRepositories +
                 '}';
     }
 }
