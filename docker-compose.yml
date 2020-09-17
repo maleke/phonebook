@@ -1,0 +1,22 @@
+version: '3.3'
+services:
+    rabbitmq:
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+        container_name: rabbitmq
+        image: 'rabbitmq:3.8.8-management'
+
+    elastic:
+        ports:
+            - '9200:9200'
+            - '9300:9300'
+        container_name: elastic
+        environment:
+            - discovery.type=single-node
+        image: 'elasticsearch:7.9.1'
+        volumes:
+            - esdata:/usr/share/elasticsearch/data
+volumes:
+    esdata:
+        driver: local
