@@ -1,14 +1,13 @@
-package com.snapp.phonebook.repository;
+package com.snapp.phonebook.search;
 
 import com.snapp.phonebook.entity.Contact;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
-public interface ContactRepository extends JpaRepository<Contact, Long> {
-    Optional<Contact> findByName(String name);
+public interface ContactElasticRepository extends ElasticsearchRepository<Contact, Long> {
+//    Optional<Contact> findByName(@Param("name") String name);
+    Contact findByName(@Param("name") String name);
 }

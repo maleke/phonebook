@@ -8,6 +8,7 @@ import com.snapp.phonebook.exceptions.error.ErrorCode;
 import com.snapp.phonebook.exceptions.error.FieldErrorDTO;
 import com.snapp.phonebook.mapper.ContactMapper;
 import com.snapp.phonebook.repository.ContactRepository;
+import com.snapp.phonebook.search.ContactElasticRepository;
 import com.snapp.phonebook.utility.SerializeUtility;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -28,13 +29,15 @@ public class ContactService {
     public static final String KEY = "githubRepository.add.contact";
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(ContactService.class);
     private final ContactMapper contactMapper;
+    private final ContactElasticRepository contactElasticRepository;
     private final ContactRepository contactRepository;
     private final GithubService githubService;
     private final RabbitTemplate rabbitTemplate;
     private final TopicExchange topic;
 
-    public ContactService(ContactMapper contactMapper, ContactRepository contactRepository, GithubService githubService, RabbitTemplate rabbitTemplate, TopicExchange topic) {
+    public ContactService(ContactMapper contactMapper, ContactRepository contactRepository, ContactElasticRepository contactElasticRepository, GithubService githubService, RabbitTemplate rabbitTemplate, TopicExchange topic) {
         this.contactMapper = contactMapper;
+        this.contactElasticRepository = contactElasticRepository;
         this.contactRepository = contactRepository;
         this.githubService = githubService;
         this.rabbitTemplate = rabbitTemplate;
@@ -59,6 +62,7 @@ public class ContactService {
         try {
             List<GithubRepository> contactGithubRepository = githubService.getContactGithubRepository(contactName).get();
             setParent(contactGithubRepository, contact);
+            contactElasticRepository.save(contact);
             contactRepository.save(contact);
         } catch (InterruptedException | ExecutionException e) {
             logger.error("An error occurred in calling githubRepository web service" + e.getMessage());
@@ -69,6 +73,7 @@ public class ContactService {
     private void checkIfUserExist(String name) throws ServiceException {
         Optional<Contact> contact = contactRepository.findByName(name);
         if (contact.isPresent())
+//        if (contact != null)
             throw new ServiceException(new FieldErrorDTO().setErrorDescription("This name already exist")
                     .setErrorCode(String.valueOf(ErrorCode.DUPLICATE_DATA.getCode())));
     }
