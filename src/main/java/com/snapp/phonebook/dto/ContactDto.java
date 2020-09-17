@@ -6,12 +6,12 @@ import java.io.Serializable;
 
 public class ContactDto implements Serializable {
     @NotNull(message = "{null.name}")
+    //todo:: add uniqueness
     private String name;
     @Column(name = "phone_number")
     private String phoneNumber;
     private String email;
     private String organization;
-    @NotNull(message = "{null.github}")
     private String github;
 
     public ContactDto() {

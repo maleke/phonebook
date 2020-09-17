@@ -13,17 +13,13 @@ public enum ErrorCode {
     LACK_OF_DATA("عدم وجود داده مورد اشاره", 6),
     LACK_OF_SOURCE("عدم وجود منابع کافی جهت تکیل درخواست ", 7),
     LACK_OF_CLIENT_ACCESS_TO_DATA("عدم دسترسی سرویس گیرنده به داده مورد ارجاع", 8),
-    IMPOSSIBLE_WITHDRAW_DEPOSIT("عدم امکان واریز / برداشت" , 8),
     SERVICE_CALL_NOT_POSSIBLE("امکان فراخوانی سرویس به صورت موقت وجود ندارد", 10),
     INTERNAL_ERROR("خطای داخلی سرویس دهنده" , 11),
     SERVICE_ACCESS_NOT_AVAILABLE("عدم دسترسی موقتی به سرویس بیرونی", 12),
     SERVICE_NOT_RESPONSE("عدم دریافت پاسخ از سرویس بیرونی", 13),
     RESEND_REQUEST("نیاز به ارسال مجدد درخواست می باشد", 14),
     SERVICE_NOT_FOUND("عدم امکان ارائه سرویس درخواستی", 15),
-    SECURITY_ERROR("خطای امنتیتی", 16),
-    DATA_SIZE_ERROR("داده خارج از محدوده مورد قبول", 17),
-    INACTIVE_REFERENCE("مرجع غیر فعال", 18),
-    REFERENCE_EXPIRE("انقضا / ابطال مرجع مورد اشاره", 19);
+    DATA_SIZE_ERROR("داده خارج از محدوده مورد قبول", 17);
 
     private final String message;
     private final int code;

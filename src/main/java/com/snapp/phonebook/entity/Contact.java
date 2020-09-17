@@ -22,8 +22,7 @@ public class Contact implements Serializable {
     private String organization;
     private String github;
 
-    @OneToMany(mappedBy = "contact", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "contact", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<GithubRepository> githubRepositories = new ArrayList<>();
 
     public Contact() {

@@ -7,15 +7,14 @@ import java.io.Serializable;
 @Table(name = "github_repository")
 public class GithubRepository implements Serializable {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    //@GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "id",updatable = false, nullable = false)
     private Long id;
 
     @Column(name = "repository_name")
     private String name;
 
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "contact_id", nullable = false)
     private Contact contact;
 
