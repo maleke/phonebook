@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class ContactService {
 
+    public static final String KEY = "githubRepository.add.contact";
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(ContactService.class);
     private final ContactMapper contactMapper;
     private final ContactRepository contactRepository;
@@ -47,9 +48,7 @@ public class ContactService {
         Contact contact = contactMapper.contactDtoToContact(contactDto);
         contact = contactRepository.save(contact);
         //using queue to retrieve github repository of contact to increase performance
-        String key = "githubRepository.insert.userName";
-        rabbitTemplate.convertAndSend(topic.getName(), key, contact);
-
+        rabbitTemplate.convertAndSend(topic.getName(), KEY, contact);
         return contactMapper.contactToContactDto(contact);
     }
 
@@ -74,11 +73,10 @@ public class ContactService {
                     .setErrorCode(String.valueOf(ErrorCode.DUPLICATE_DATA.getCode())));
     }
 
-    private Contact setParent(List<GithubRepository> contactGithubRepositorys, Contact contact) {
-        for (GithubRepository githubRepository : contactGithubRepositorys)
+    private void setParent(List<GithubRepository> contactGithubRepositories, Contact contact) {
+        for (GithubRepository githubRepository : contactGithubRepositories)
             githubRepository.setContact(contact);
-        contact.setGithubRepositories(contactGithubRepositorys);
-        return contact;
+        contact.setGithubRepositories(contactGithubRepositories);
     }
 
 }
