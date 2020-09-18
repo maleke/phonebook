@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.snapp.phonebook.exceptions.error.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -127,6 +128,14 @@ public class ExceptionTranslator {
         return new FieldErrorDTO()
                 .setErrorCode(String.valueOf(ErrorCode.INTERNAL_ERROR.getCode()))
                 .setErrorDescription(ErrorCode.INTERNAL_ERROR.getMessage());
+    }
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public FieldErrorDTO processDataIntegrityViolationException(DataIntegrityViolationException exception) {
+        return new FieldErrorDTO()
+                .setErrorCode(String.valueOf(ErrorCode.INTERNAL_ERROR.getCode()))
+                .setErrorDescription("some input value are incorrect");
     }
 
     @ExceptionHandler(ServiceException.class)

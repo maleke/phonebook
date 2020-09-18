@@ -1,5 +1,6 @@
 package com.snapp.phonebook.dto;
 
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 

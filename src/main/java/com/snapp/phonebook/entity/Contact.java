@@ -1,5 +1,6 @@
 package com.snapp.phonebook.entity;
 
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -21,6 +22,7 @@ public class Contact implements Serializable {
     private Long id;
 
     @Field(type = FieldType.Keyword)
+    @Column(unique = true)
     private String name;
 
     @Field(name="phone_number", type = FieldType.Keyword)
