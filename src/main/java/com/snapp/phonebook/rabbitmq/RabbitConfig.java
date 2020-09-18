@@ -18,13 +18,13 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Queue queue() {
+    public Queue autoDeleteQueue() {
         return new Queue("githubRepository queue");
     }
 
     @Bean
-    public Binding binding(TopicExchange topic, Queue queue) {
-        return BindingBuilder.bind(queue)
+    public Binding binding(TopicExchange topic, Queue autoDeleteQueue) {
+        return BindingBuilder.bind(autoDeleteQueue)
                 .to(topic)
                 .with("githubRepository.*.*");
     }

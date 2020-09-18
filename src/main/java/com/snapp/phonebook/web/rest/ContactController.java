@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "${info.rest.version}")
+@RequestMapping
 public class ContactController {
 
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(ContactService.class);

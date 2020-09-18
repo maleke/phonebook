@@ -69,7 +69,7 @@ public class ContactService {
         return contactMapper.contactToContactDto(contact);
     }
 
-    @RabbitListener(queues = "#{queue.name}")
+    @RabbitListener(queues = "#{autoDeleteQueue.name}")
     public void receive(Message contactByte) throws IOException, ClassNotFoundException {
         Contact contact = (Contact) SerializeUtility.deserialize(contactByte.getBody());
         String contactName = contact.getName();
@@ -109,12 +109,6 @@ public class ContactService {
                 .map(contactSearchHit ->
                         contactMapper.contactToContactSearchDto(contactSearchHit.getContent())
                 ).collect(Collectors.toList());
-//        for (SearchHit<Contact> contact: result) {
-//            Contact c = contact.getContent();
-//            System.out.println(c);
-//        }
-
-
         return contactSearchDtos;
     }
 
