@@ -25,7 +25,7 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily or reach maxFileSize -->
-            <fileNamePattern>${LOG_ARCHIVE}/SgLog.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_ARCHIVE}/PhonebookLog.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>90</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -33,7 +33,7 @@
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
     </appender>
-    <logger name="com.iranargham" level="${LOG_LEVEL}"/>
+    <logger name="com.snapp" level="${LOG_LEVEL}"/>
 
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
@@ -67,7 +67,7 @@
     </contextListener>
 
     <root level="${LOG_LEVEL}">
-        <appender-ref ref="CONSOLE"/>
+<!--        <appender-ref ref="CONSOLE"/>-->
         <appender-ref ref="FILE"/>
     </root>
 

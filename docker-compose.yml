@@ -15,29 +15,29 @@ services:
         environment:
             - discovery.type=single-node
         image: 'elasticsearch:7.9.1'
-#        volumes:
-#            - esdata:/usr/share/elasticsearch/data
+        volumes:
+            - esdata:/usr/share/elasticsearch/data
 
     postgres:
         ports:
             - '5432:5432'
         volumes:
             - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-#            - pgdata:/var/lib/postgresql/data
+            - pgdata:/var/lib/postgresql/data
         container_name: postgres
         environment:
             - POSTGRES_PASSWORD=postgres
         image: 'postgres:12.4'
-#    phonebook:
-#        ports:
-#            - '8001:8001'
-#        environment:
-#            - SPRING_PROFILES_ACTIVE=docker
-#        depends_on:
-#            - postgres
-#            - rabbitmq
-#            - elastic
-#        image: 'phonebook:1.0.0'
+    phonebook:
+        ports:
+            - '8001:8001'
+        environment:
+            - SPRING_PROFILES_ACTIVE=docker
+        depends_on:
+            - postgres
+            - rabbitmq
+            - elastic
+        image: 'phonebook:1.0.0'
 volumes:
     esdata:
         driver: local

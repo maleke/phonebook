@@ -36,8 +36,6 @@ import java.util.stream.Collectors;
 @Service
 public class ContactService {
 
-    public static final String ROUTING_KEY = "githubRepository.add.contact";
-//    public static final String KEY = "simple";
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(ContactService.class);
     private final ContactMapper contactMapper;
     private final ContactElasticRepository contactElasticRepository;
@@ -64,7 +62,7 @@ public class ContactService {
         Contact contact = contactMapper.contactDtoToContact(contactDto);
         try {
             contact = contactRepository.save(contact);
-        } catch (DataIntegrityViolationException ex){
+        } catch (DataIntegrityViolationException ex) {
             throw new ServiceException(new FieldErrorDTO().setErrorDescription("This name is already exist")
                     .setErrorCode(String.valueOf(ErrorCode.DUPLICATE_DATA.getCode())));
         }

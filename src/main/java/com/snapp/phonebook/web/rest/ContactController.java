@@ -30,12 +30,11 @@ public class ContactController {
     @RequestMapping(value = "/contacts", method = RequestMethod.POST)
     public ResponseEntity<ContactDto> createContact(@Valid @RequestBody ContactDto contactDto)
             throws ServiceException {
-
         logger.debug("REST request to save contact : {}", contactDto);
         ContactDto result = contactService.save(contactDto);
-
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
     @RequestMapping(value = "/contacts/search", method = RequestMethod.POST)
     public ResponseEntity<List<ContactSearchDto>> findContact(@Valid @RequestBody ContactSearchDto contactSearchDto)
             throws ServiceException {
