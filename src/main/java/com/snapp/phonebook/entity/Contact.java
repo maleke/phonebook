@@ -16,9 +16,9 @@ import java.util.List;
 public class Contact implements Serializable {
     @Id
     @org.springframework.data.annotation.Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id",updatable = false, nullable = false)
-    private String id;
+    private Long id;
 
     @Field(type = FieldType.Keyword)
     private String name;
@@ -42,11 +42,12 @@ public class Contact implements Serializable {
     }
     //region getterAndSetter
 
-    public String getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public Contact setId(String id) {
+    public Contact setId(Long id) {
         this.id = id;
         return this;
     }

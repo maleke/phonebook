@@ -17,6 +17,18 @@ services:
         image: 'elasticsearch:7.9.1'
         volumes:
             - esdata:/usr/share/elasticsearch/data
+    postgres:
+        ports:
+            - '5432:5432'
+        volumes:
+            - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+            - pgdata:/var/lib/postgresql/data
+        container_name: postgres
+        environment:
+            - POSTGRES_PASSWORD=postgres
+        image: 'postgres:12.4'
 volumes:
     esdata:
+        driver: local
+    pgdata:
         driver: local
