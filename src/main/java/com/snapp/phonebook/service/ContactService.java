@@ -11,29 +11,26 @@ import com.snapp.phonebook.mapper.ContactMapper;
 import com.snapp.phonebook.repository.ContactRepository;
 import com.snapp.phonebook.search.ContactElasticRepository;
 import com.snapp.phonebook.utility.SerializeUtility;
-import io.netty.util.internal.StringUtil;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.*;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.*;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,17 +70,13 @@ public class ContactService {
     }
 
     @RabbitListener(queues = "#{queue.name}")
-    public void receive(Message contactByte) throws IOException, ClassNotFoundException, ServiceException {
+    public void receive(Message contactByte) throws IOException, ClassNotFoundException {
         Contact contact = (Contact) SerializeUtility.deserialize(contactByte.getBody());
         String contactName = contact.getName();
-        try {
-            List<GithubRepository> contactGithubRepository = githubService.getContactGithubRepository(contactName).get();
-            setParent(contactGithubRepository, contact);
-            contact = contactRepository.save(contact);
-            contactElasticRepository.save(contact);
-        } catch (InterruptedException | ExecutionException e) {
-            logger.error("An error occurred in calling githubRepository web service" + e.getMessage());
-        }
+        List<GithubRepository> contactGithubRepository = githubService.getContactGithubRepository(contactName);
+        setParent(contactGithubRepository, contact);
+        contact = contactRepository.save(contact);
+        contactElasticRepository.save(contact);
     }
 
     private void checkIfUserExist(String name) throws ServiceException {
